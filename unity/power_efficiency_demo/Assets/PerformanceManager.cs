@@ -38,12 +38,7 @@ public class PerformanceManager : MonoBehaviour
         SetGraphicsAPIText();
         SetFrameRateFromGameMode();
     }
-
-    void Update()
-    {
-        
-    }
-
+    
     void OnApplicationPause(bool pauseStatus)
     {
         if (!pauseStatus)

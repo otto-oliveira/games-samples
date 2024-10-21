@@ -57,7 +57,14 @@ public class VkQualityTestActivity extends UnityPlayerActivity {
 
     private void CheckVkQuality() {
         VKQuality vkQuality = new VKQuality(this);
-        int startResult = vkQuality.StartVkQuality("");
+        // Currently defined flags (bitfields, can be OR'ed together):
+        // Recommend to just pass 0 unless you know why you want to set a flag
+        // VkQuality.INIT_FLAG_SKIP_STARTUP_MITIGATION = 1
+        //   If set, this will skip the startup crash mitigation path
+        // VkQuality INIT_FLAG_GLES_ONLY_STARTUP_MITIGATION_DEVICES = 2
+        //   If set, this will only return GLES and never Vulkan for
+        //   devices affected by the startup crash mitigation path
+        int startResult = vkQuality.StartVkQualityWithFlags("", 0);
         if (startResult == VKQuality.INIT_SUCCESS) {
             // In the current release, we can assume GetVkQuality is
             // ready as soon as StartVkQuality has returned success
