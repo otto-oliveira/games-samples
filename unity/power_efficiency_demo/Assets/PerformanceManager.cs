@@ -13,12 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AdaptivePerformance;
 using UnityEngine.Rendering;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class PerformanceManager : MonoBehaviour
 {
@@ -28,9 +31,11 @@ public class PerformanceManager : MonoBehaviour
 
     public Text AdaptivePerformanceText;
 
+    public Text TargetFrameRateText;
+
     const int BatteryModeFrameRate = 30;
-	const int StandardModeFrameRate = 60;
-	const int PerformanceModeFrameRate = 120;
+    const int StandardModeFrameRate = 60;
+    const int PerformanceModeFrameRate = 120;
 
     void Start()
     {
@@ -38,27 +43,47 @@ public class PerformanceManager : MonoBehaviour
         SetGraphicsAPIText();
         SetFrameRateFromGameMode();
     }
-    
+
+    private void Update()
+    {
+        if (Input.touchCount == 2)
+        {
+            Application.targetFrameRate = Random.Range(0, 100) > 50 ? 30 : 60;
+            UpdateTargetFramerate();
+        }
+
+        if (Input.touchCount == 3)
+        {
+            Application.targetFrameRate = Random.Range(0, 100) > 50 ? 30 : 60;
+            UpdateTargetFramerate();
+        }
+    }
+
     void OnApplicationPause(bool pauseStatus)
     {
         if (!pauseStatus)
         {
-			// Query the game mode after resuming, as the
-			// mode may have been changed by the user while
-			// the game was in the background
+            // Query the game mode after resuming, as the
+            // mode may have been changed by the user while
+            // the game was in the background
             SetFrameRateFromGameMode();
         }
     }
 
-	void SetGameModeText(string modeText)
-	{
-		GameModeText.text = modeText;
-	}
+    void UpdateTargetFramerate()
+    {
+        TargetFrameRateText.text = $"Target Framerate {Application.targetFrameRate}";
+    }
+
+    void SetGameModeText(string modeText)
+    {
+        GameModeText.text = $"{modeText}";
+        UpdateTargetFramerate();
+    }
 
     void SetFrameRateFromGameMode()
     {
         int gameMode = GameModeUtil.GetGameMode();
-		SetGameModeText(GameModeUtil.GetGameModeString(gameMode));
 
         switch (gameMode)
         {
@@ -81,6 +106,8 @@ public class PerformanceManager : MonoBehaviour
             default:
                 break;
         }
+
+        SetGameModeText(GameModeUtil.GetGameModeString(gameMode));
     }
 
     void SetGraphicsAPIText()

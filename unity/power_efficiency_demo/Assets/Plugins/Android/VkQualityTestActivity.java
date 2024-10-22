@@ -166,10 +166,12 @@ public class VkQualityTestActivity extends UnityPlayerActivity {
 
     public void SetDisplayRefreshRate(int refreshRate) 
     {
+        Log.e("OTTO", "Try Set Display Refresh Rate to " + refreshRate);
         SurfaceView surfaceView = findViewById(R.id.unitySurfaceView);        
         Surface targetSurface = surfaceView.getHolder().getSurface();
         if (VERSION.SDK_INT >= VERSION_CODES.R) {
             targetSurface.setFrameRate(refreshRate, Surface.FRAME_RATE_COMPATIBILITY_DEFAULT);
+            Log.e("OTTO", "SetDisplayRefreshRate compatible " + refreshRate);
         }
     }
 }

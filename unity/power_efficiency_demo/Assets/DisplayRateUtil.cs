@@ -18,6 +18,7 @@ public static class DisplayRateUtil
 {
  	public static void SetDisplayRefreshRate(int refreshRate)
  	{
+	    Debug.Log($"SetDisplayRefreshRate {refreshRate}");
 		// This routine is dependent on a custom Activity overriding the standard
 		// UnityPlayerActivity that implements a SetDisplayRefreshRate function. For this
 		// project it is located in the Assets/Plugins/Android/VkQualityTestActivity.java file
