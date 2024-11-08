@@ -20,17 +20,25 @@ public static class DisplayRateUtil
 {
     private static AndroidJavaClass unityPlayerClass;
     private static AndroidJavaObject activity;
+    private static AndroidJavaObject displayUtil;
 
+    public static void Init()
+    {
+#if UNITY_ANDROID// && !UNITY_EDITOR
+        Debug.Log($"Init");
+        //Find the UnityPlayer class that must be present
+        unityPlayerClass ??= new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+        //Get the Current Activity statically 
+        activity ??= unityPlayerClass.GetStatic<AndroidJavaObject>("currentActivity");
+        //Create a new Display Util object
+        displayUtil ??= new AndroidJavaClass("com.google.android.games.DisplayUtil");
+#endif
+    }
+    
     public static void SetDisplayRefreshRate(int refreshRate)
     {
-#if UNITY_ANDROID && !UNITY_EDITOR
-        Debug.Log($"SetDisplayRefreshRate {refreshRate}");
-        // This routine is dependent on a custom Activity overriding the standard
-        // UnityPlayerActivity that implements a SetDisplayRefreshRate function. For this
-        // project it is located in the Assets/Plugins/Android/VkQualityTestActivity.java file
-        unityPlayerClass ??= new AndroidJavaClass("com.unity3d.player.UnityPlayer");
-        activity ??= unityPlayerClass.GetStatic<AndroidJavaObject>("currentActivity");
-        activity.Call("setDisplayRefreshRate", refreshRate);
+#if UNITY_ANDROID// && !UNITY_EDITOR
+        displayUtil.Call("setDisplayRefreshRate", refreshRate);
 #endif
     }
 
@@ -38,9 +46,7 @@ public static class DisplayRateUtil
     {
         float refreshRate = 60; // Default to 60Hz if we can't detect
 
-#if UNITY_ANDROID && !UNITY_EDITOR
-        unityPlayerClass ??= new AndroidJavaClass("com.unity3d.player.UnityPlayer");
-        activity ??= unityPlayerClass.GetStatic<AndroidJavaObject>("currentActivity");
+#if UNITY_ANDROID// && !UNITY_EDITOR
         refreshRate = activity.Call<float>("getDisplayRefreshRate");
 #endif
 
