@@ -32,6 +32,7 @@ public static class DisplayRateUtil
         activity ??= unityPlayerClass.GetStatic<AndroidJavaObject>("currentActivity");
         //Create a new Display Util object
         displayUtil ??= new AndroidJavaObject("com.google.android.games.DisplayUtil");
+        displayUtil.Call("init", activity);
 #endif
     }
     

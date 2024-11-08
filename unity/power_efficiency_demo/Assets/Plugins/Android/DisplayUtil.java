@@ -15,7 +15,7 @@ public class DisplayUtil {
 
     private Display _display;
     private Surface _targetSurface;
-    private String TAG = "DisplayUtil";
+    private final String TAG = "DisplayUtil";
 
     public void init(Context context) {
         Activity activity = (Activity) context;
