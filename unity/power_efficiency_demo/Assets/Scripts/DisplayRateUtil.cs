@@ -47,7 +47,7 @@ public static class DisplayRateUtil
         float refreshRate = 60; // Default to 60Hz if we can't detect
 
 #if UNITY_ANDROID && !UNITY_EDITOR
-        refreshRate = activity.Call<float>("getDisplayRefreshRate");
+        refreshRate = displayUtil.Call<float>("getDisplayRefreshRate");
 #endif
 
         return refreshRate;

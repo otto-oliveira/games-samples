@@ -15,6 +15,7 @@ public class DisplayUtil {
 
     private Display _display;
     private Surface _targetSurface;
+    private String TAG = "DisplayUtil";
 
     public void init(Context context) {
         Activity activity = (Activity) context;
@@ -32,17 +33,17 @@ public class DisplayUtil {
     }
 
     public void setDisplayRefreshRate(int refreshRate) {
-        Log.e("OTTO", "Try Set Display Refresh Rate to " + refreshRate);
+        Log.e(TAG, "Try Set Display Refresh Rate to " + refreshRate);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             _targetSurface.setFrameRate(refreshRate, Surface.FRAME_RATE_COMPATIBILITY_DEFAULT);
-            Log.e("OTTO", "SetDisplayRefreshRate compatible " + refreshRate);
+            Log.e(TAG, "SetDisplayRefreshRate compatible " + refreshRate);
         }
     }
 
     public float getDisplayRefreshRate() {
         float refreshRate = _display.getRefreshRate();
-        Log.e("OTTO", "GetDisplayRefreshRate " + refreshRate);
+        Log.e(TAG, "GetDisplayRefreshRate " + refreshRate);
         return refreshRate;
     }
 }
