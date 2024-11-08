@@ -18,7 +18,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AdaptivePerformance;
 using UnityEngine.Rendering;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
@@ -31,34 +30,42 @@ public class PerformanceManager : MonoBehaviour
 
     public Text AdaptivePerformanceText;
 
-    public Text TargetFrameRateText;
+    [SerializeField] private  Text TargetFrameRateText;
+    [SerializeField] private Text DisplayRateText;
 
     const int BatteryModeFrameRate = 30;
     const int StandardModeFrameRate = 60;
     const int PerformanceModeFrameRate = 120;
 
+    [SerializeField] private Slider framerateSlider;
+    [SerializeField] private Slider displayRateSlider;
+
     void Start()
     {
         SetAdaptivePerformanceText();
         SetGraphicsAPIText();
-        SetFrameRateFromGameMode();
+        //SetFrameRateFromGameMode();
+        framerateSlider.onValueChanged.AddListener(OnFramerateChanged);
+        displayRateSlider.onValueChanged.AddListener(OnDisplayRateChanged);
+        StartCoroutine(UpdateStats());
     }
 
-    private void Update()
+    private void OnDisplayRateChanged(float value)
     {
-        if (Input.touchCount == 2)
-        {
-            Application.targetFrameRate = Random.Range(0, 100) > 50 ? 30 : 60;
-            UpdateTargetFramerate();
-        }
-
-        if (Input.touchCount == 3)
-        {
-            Application.targetFrameRate = Random.Range(0, 100) > 50 ? 30 : 60;
-            UpdateTargetFramerate();
-        }
+        var rate = value * 30;
+        var final = (int)rate;
+        DisplayRateUtil.SetDisplayRefreshRate(final);
+        StartCoroutine(UpdateStats());
     }
 
+    private void OnFramerateChanged(float value)
+    {
+        var rate = value * 30;
+        var final = (int)rate;
+        Application.targetFrameRate = final;
+        StartCoroutine(UpdateStats());
+    }
+    
     void OnApplicationPause(bool pauseStatus)
     {
         if (!pauseStatus)
@@ -66,19 +73,21 @@ public class PerformanceManager : MonoBehaviour
             // Query the game mode after resuming, as the
             // mode may have been changed by the user while
             // the game was in the background
-            SetFrameRateFromGameMode();
+            //SetFrameRateFromGameMode();
         }
     }
 
-    void UpdateTargetFramerate()
+    IEnumerator UpdateStats()
     {
+        yield return new WaitForSeconds(0.3f);
         TargetFrameRateText.text = $"Target Framerate {Application.targetFrameRate}";
+        DisplayRateText.text = $"Display Rate {DisplayRateUtil.GetDeviceRefreshRate()}";
     }
 
     void SetGameModeText(string modeText)
     {
         GameModeText.text = $"{modeText}";
-        UpdateTargetFramerate();
+        StartCoroutine(UpdateStats());
     }
 
     void SetFrameRateFromGameMode()
@@ -146,7 +155,7 @@ public class PerformanceManager : MonoBehaviour
 
     void SetAdaptivePerformanceText()
     {
-        IAdaptivePerformance adaptivePerformance = Holder.Instance;
+        /*IAdaptivePerformance adaptivePerformance = Holder.Instance;
         if (adaptivePerformance == null || !adaptivePerformance.Active)
         {
             AdaptivePerformanceText.text = "Adaptive Performance not active";
@@ -154,6 +163,6 @@ public class PerformanceManager : MonoBehaviour
         else
         {
             AdaptivePerformanceText.text = "Adaptive Performance active";
-        }
+        }*/
     }
 }
