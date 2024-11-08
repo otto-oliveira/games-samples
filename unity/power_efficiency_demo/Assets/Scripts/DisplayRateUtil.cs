@@ -24,7 +24,7 @@ public static class DisplayRateUtil
 
     public static void Init()
     {
-#if UNITY_ANDROID// && !UNITY_EDITOR
+#if UNITY_ANDROID && !UNITY_EDITOR
         Debug.Log($"Init");
         //Find the UnityPlayer class that must be present
         unityPlayerClass ??= new AndroidJavaClass("com.unity3d.player.UnityPlayer");
@@ -37,7 +37,7 @@ public static class DisplayRateUtil
     
     public static void SetDisplayRefreshRate(int refreshRate)
     {
-#if UNITY_ANDROID// && !UNITY_EDITOR
+#if UNITY_ANDROID && !UNITY_EDITOR
         displayUtil.Call("setDisplayRefreshRate", refreshRate);
 #endif
     }
@@ -46,7 +46,7 @@ public static class DisplayRateUtil
     {
         float refreshRate = 60; // Default to 60Hz if we can't detect
 
-#if UNITY_ANDROID// && !UNITY_EDITOR
+#if UNITY_ANDROID && !UNITY_EDITOR
         refreshRate = activity.Call<float>("getDisplayRefreshRate");
 #endif
 

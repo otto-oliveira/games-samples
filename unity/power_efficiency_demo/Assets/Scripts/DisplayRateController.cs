@@ -16,19 +16,12 @@
 
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class DisplayRateController : MonoBehaviour
 {
-    [FormerlySerializedAs("ApiText")] public Text apiText;
-
-    [FormerlySerializedAs("GameModeText")] public Text gameModeText;
-
-    [FormerlySerializedAs("AdaptivePerformanceText")] public Text adaptivePerformanceText;
-
-    [FormerlySerializedAs("TargetFrameRateText")] [SerializeField] private  Text targetFrameRateText;
-    [FormerlySerializedAs("DisplayRateText")] [SerializeField] private Text displayRateText;
+    [SerializeField] private Text targetFrameRateText;
+    [SerializeField] private Text displayRateText;
 
 
     [SerializeField] private Slider framerateSlider;
@@ -37,7 +30,6 @@ public class DisplayRateController : MonoBehaviour
     void Start()
     {
         DisplayRateUtil.Init();
-        //SetFrameRateFromGameMode();
         framerateSlider.onValueChanged.AddListener(OnFramerateChanged);
         displayRateSlider.onValueChanged.AddListener(OnDisplayRateChanged);
         StartCoroutine(UpdateStats());
@@ -59,11 +51,10 @@ public class DisplayRateController : MonoBehaviour
         StartCoroutine(UpdateStats());
     }
 
-    IEnumerator UpdateStats()
+    private IEnumerator UpdateStats()
     {
         yield return new WaitForSeconds(0.3f);
         targetFrameRateText.text = $"Target Framerate {Application.targetFrameRate}";
         displayRateText.text = $"Display Rate {DisplayRateUtil.GetDeviceRefreshRate()}";
     }
-
 }
