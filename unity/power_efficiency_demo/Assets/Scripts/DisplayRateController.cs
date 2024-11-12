@@ -39,6 +39,7 @@ public class DisplayRateController : MonoBehaviour
     {
         var rate = value * 30;
         var final = (int)rate;
+        //TODO: Get supported RR and decide nearest value before setting
         DisplayRateUtil.SetDisplayRefreshRate(final);
         StartCoroutine(UpdateStats());
     }
